@@ -1,19 +1,19 @@
-### Utilização do Servidor de Arquivos Temporários com Nginx
+# Utilização do Servidor de Arquivos Temporários com Nginx
 
 
-#### Introdução
+## Introdução
 
 Este documento fornece instruções detalhadas sobre como utilizar o servidor de arquivos temporários configurado com Nginx. Ele inclui exemplos de código para envio e recuperação de arquivos, bem como instruções para garantir a autenticação e o acesso seguro.
 
 
-#### Pré-requisitos
+## Pré-requisitos
 
 - Um servidor de arquivos temporários configurado com Nginx conforme a documentação anterior.
 - Python instalado no seu sistema.
 - Biblioteca `requests` instalada (pode ser instalada usando `pip install requests`).
 
 
-#### Enviando Arquivos para o Servidor
+## Enviando Arquivos para o Servidor
 
 Para enviar arquivos para o servidor, você pode utilizar o seguinte código Python. Este exemplo cria um arquivo com um nome aleatório e envia seu conteúdo para o servidor usando uma requisição `PUT`.
 
@@ -44,7 +44,7 @@ print(f'Upload Response: {response.text}')
 ```
 
 
-##### Explicação
+### Explicação
 
 - **file_name**: Gera um nome aleatório para o arquivo a ser enviado.
 - **file_data**: Gera um conteúdo aleatório para o arquivo.
@@ -53,7 +53,7 @@ print(f'Upload Response: {response.text}')
 - **requests.put**: Envia o arquivo para o servidor com autenticação básica.
 
 
-#### Recuperando Arquivos do Servidor
+## Recuperando Arquivos do Servidor
 
 Para recuperar um arquivo enviado ao servidor, você pode utilizar o seguinte código Python. Este exemplo recupera o conteúdo do arquivo previamente enviado.
 
@@ -69,25 +69,25 @@ print(f'File Content: {file_response.text}')
 ```
 
 
-##### Explicação
+### Explicação
 
 - **file_url**: Define a URL do endpoint de recuperação do arquivo.
 - **requests.get**: Recupera o arquivo do servidor.
 
 
-#### Utilização com cURL
+## Utilização com cURL
 
 Você também pode utilizar cURL para enviar e recuperar arquivos. Abaixo estão os comandos para realizar essas operações.
 
 
-##### Enviando Arquivos com cURL
+### Enviando Arquivos com cURL
 
 ```sh
 curl -u xDz6tQGa55yGu7q:qFUtf9jnyV5Y4b6 -X PUT --upload-file user.txt http://localhost:8080/upload/user.txt -v
 ```
 
 
-##### Explicação
+### Explicação
 
 - **-u**: Especifica as credenciais de autenticação.
 - **-X PUT**: Define o método HTTP como PUT.
@@ -95,21 +95,17 @@ curl -u xDz6tQGa55yGu7q:qFUtf9jnyV5Y4b6 -X PUT --upload-file user.txt http://loc
 - **-v**: Habilita o modo verbose para exibir detalhes da requisição.
 
 
-##### Recuperando Arquivos com cURL
+### Recuperando Arquivos com cURL
 
 ```sh
 curl http://localhost:8080/get/user.txt -v
 ```
 
 
-##### Explicação
+### Explicação
 
 - Este comando envia uma requisição GET para recuperar o arquivo `user.txt` do servidor.
 
-
-#### Considerações Finais
-
-Este guia fornece exemplos práticos de como utilizar o servidor de arquivos temporários configurado com Nginx. Seguindo estas instruções, você poderá enviar e recuperar arquivos de maneira eficiente e segura.
 
 
 <sub>Ultima atualização 29/07/2024.</sub>

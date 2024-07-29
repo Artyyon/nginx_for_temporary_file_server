@@ -1,33 +1,22 @@
-### Documentação do Servidor de Arquivos Temporários com Nginx
+# Documentação do Servidor de Arquivos Temporários com Nginx
 
 
-#### O que é o Nginx?
+## O que é o Nginx?
 
 O Nginx (pronuncia-se "Engine-X") é um servidor web de código aberto e um servidor proxy reverso, desenvolvido originalmente por Igor Sysoev e lançado em 2004. Ele é amplamente utilizado por sua alta performance, estabilidade, recursos ricos, configuração simples e baixo consumo de recursos. Além de servir páginas web, o Nginx é muito utilizado como proxy reverso, balanceador de carga, cache HTTP e servidor de arquivos estáticos.
 
 
-#### Nginx para Servidor de Arquivos Temporários
+## Nginx para Servidor de Arquivos Temporários
 
 Utilizar o Nginx dentro do Docker Compose durante a implementação inicial da API pode ser uma boa opção devido à facilidade de configuração e alta performance do Nginx. Ele pode servir eficientemente como um intermediário para a disponibilização de arquivos temporários criados pela API, garantindo que esses arquivos sejam acessíveis ao usuário apenas por um período determinado, aumentando a segurança e gerenciamento dos recursos.
 
 
-### Implementação do Servidor de Arquivos Temporários
+# Implementação do Servidor de Arquivos Temporários
 
-#### Arquitetura de Pastas do Projeto para Criação do Servidor
+## Arquitetura de Pastas do Projeto para Criação do Servidor
 
-```
-- file_server
-  - files
-  - logs
-  - nginx
-    - conf.d
-      - server.conf
-    .htpasswd
-    delete_old_files.sh
-    Dockerfile
-    nginx.conf
-  - docker-compose.yml
-```
+<img src="arch.png" alt="Arquitetura do diretório"/>
+
 
 - `files`: Pasta local que será espelhada com a pasta dentro do container para armazenar os arquivos temporários.
 - `logs`: Pasta local para armazenar os logs do servidor.
@@ -40,9 +29,9 @@ Utilizar o Nginx dentro do Docker Compose durante a implementação inicial da A
 - `docker-compose.yml`: Arquivo Docker Compose para orquestração dos containers.
 
 
-#### Configurações de Entrada e Saída do Servidor
+## Configurações de Entrada e Saída do Servidor
 
-##### Arquivo: `server.conf`
+### Arquivo: `server.conf`
 
 ```nginx
 server {
@@ -105,7 +94,7 @@ server {
 ```
 
 
-##### Explicação das Configurações
+### Explicação das Configurações
 
 - **listen**: Define a porta na qual o servidor irá escutar (8080).
 - **server_name**: Nome do servidor.
@@ -114,9 +103,9 @@ server {
 - **location /get**: Configura o endpoint para recuperação de arquivos, incluindo controle de acesso e CORS.
 
 
-#### Configuração Geral do Servidor
+## Configuração Geral do Servidor
 
-##### Arquivo: `nginx.conf`
+### Arquivo: `nginx.conf`
 
 ```nginx
 user  nginx;
@@ -147,7 +136,7 @@ http {
 ```
 
 
-##### Explicação das Configurações
+### Explicação das Configurações
 
 - **user**: Define o usuário sob o qual o serviço do Nginx será executado.
 - **worker_processes**: Define o número de processos de trabalho a serem usados pelo Nginx.
@@ -157,9 +146,9 @@ http {
 - **http**: Configurações HTTP, incluindo tipos MIME, formato de log, e configuração de conexões keep-alive.
 
 
-#### Configuração do Servidor para Tempo de Vida dos Arquivos
+## Configuração do Servidor para Tempo de Vida dos Arquivos
 
-##### Arquivo: `delete_old_files.sh`
+### Arquivo: `delete_old_files.sh`
 
 ```sh
 #!/bin/sh
@@ -170,28 +159,28 @@ find "$UPLOAD_DIR" -type f -mmin +10 -exec rm -f {} \;
 ```
 
 
-##### Explicação do Script
+### Explicação do Script
 
 Este script procura e exclui arquivos no diretório de uploads que tenham mais de 10 minutos.
 
 
-#### Arquivo de Autenticação de Usuários
+## Arquivo de Autenticação de Usuários
 
-##### Arquivo: `.htpasswd`
+### Arquivo: `.htpasswd`
 
 ```
 xDz6tQGa55yGu7q:$apr1$u2v5469n$2L38MUR3gxsFN4kiOS5cw1
 ```
 
 
-##### Explicação do Arquivo
+### Explicação do Arquivo
 
 O arquivo `.htpasswd` contém o usuário e senha hash para autenticação básica. Neste exemplo, o usuário é `xDz6tQGa55yGu7q` e a senha é `qFUtf9jnyV5Y4b6`. O Nginx utiliza este arquivo para verificar as credenciais durante a autenticação básica, conforme configurado no `server.conf`.
 
 
-#### Arquivo Docker para Criação do Servidor
+## Arquivo Docker para Criação do Servidor
 
-##### Arquivo: `Dockerfile`
+### Arquivo: `Dockerfile`
 
 ```dockerfile
 FROM nginx:latest
@@ -211,7 +200,7 @@ CMD service cron start && nginx -g 'daemon off;'
 ```
 
 
-##### Explicação do Dockerfile
+### Explicação do Dockerfile
 
 - **FROM nginx:latest**: Usa a imagem mais recente do Nginx.
 - **RUN apt-get update && apt-get install -y cron apache2-utils**: Instala cron e apache2-utils.
@@ -221,9 +210,9 @@ CMD service cron start && nginx -g 'daemon off;'
 - **CMD**: Inicia o serviço cron e o Nginx.
 
 
-#### Arquivo Docker Compose para Criação do Container para o Servidor
+## Arquivo Docker Compose para Criação do Container para o Servidor
 
-##### Arquivo: `docker-compose.yml`
+### Arquivo: `docker-compose.yml`
 
 ```yaml
 version: '1'
@@ -245,7 +234,7 @@ networks:
 ```
 
 
-##### Explicação do Docker Compose
+### Explicação do Docker Compose
 
 - **version**: Define a versão do Docker Compose.
 - **services**: Define os serviços a serem orquestrados.
@@ -255,10 +244,6 @@ networks:
   - **volumes**: Define volumes para persistência de arquivos e logs.
   - **networks**: Define a rede do Docker.
 
-
-#### Conclusão
-
-Este guia fornece uma visão detalhada e replicável da configuração de um servidor de arquivos temporários utilizando o Nginx. Ao seguir estas instruções, você poderá criar um servidor eficiente, seguro e capaz de gerenciar arquivos temporários com facilidade.
 
 
 <sub>Ultima atualização 29/07/2024.</sub>

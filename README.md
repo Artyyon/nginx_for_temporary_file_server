@@ -1,14 +1,17 @@
-#### Servidor de Arquivos Temporários com Nginx
+<img src="image.png" alt="Logo" width="300"/>
+
+
+# Servidor de Arquivos Temporários com Nginx
 
 Este conjunto de documentos visa fornecer uma compreensão abrangente sobre a implementação e utilização de um servidor de arquivos temporários usando Nginx. O primeiro documento detalha a configuração e a implementação do servidor, incluindo a estrutura de pastas, os arquivos de configuração e as instruções para configurar o servidor dentro de um container Docker. O segundo documento complementa o primeiro, fornecendo exemplos práticos de como interagir com o servidor para enviar e recuperar arquivos, utilizando tanto Python quanto cURL.
 
 
-#### Objetivo
+## Objetivo
 
 O objetivo principal destes documentos é facilitar a replicação da configuração do servidor de arquivos temporários, permitindo que desenvolvedores e administradores de sistema possam rapidamente configurar e utilizar o Nginx para servir arquivos temporários. Além disso, os exemplos práticos fornecidos visam ilustrar como realizar operações comuns de upload e download de arquivos de maneira segura e eficiente.
 
 
-#### Conteúdo dos Documentos
+## Conteúdo dos Documentos
 
 1. [**Documentação de Implementação do Servidor de Arquivos Temporários com Nginx**](create_file_server.md)
    - **Descrição do Nginx**: Uma introdução ao Nginx, incluindo sua história, funcionalidade principal e usos comuns.
