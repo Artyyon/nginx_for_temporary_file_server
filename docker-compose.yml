@@ -1,0 +1,16 @@
+version: '1'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./files:/usr/share/nginx/html/files
+      - ./logs:/var/log/nginx
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
