@@ -1,8 +1,8 @@
 FROM nginx:latest
 
 
-# Instalar cron e apache2-utils
-RUN apt-get update && apt-get install -y cron apache2-utils
+# Instalar cron, apache2-utils e dos2unix
+RUN apt-get update && apt-get install -y cron apache2-utils dos2unix
 
 
 # Copiar arquivos de configuração do Nginx
@@ -13,6 +13,9 @@ COPY conf.d/server.conf /etc/nginx/conf.d/server.conf
 # Copiar o script de exclusão
 COPY delete_old_files.sh /usr/local/bin/delete_old_files.sh
 
+
+# Converter o script para formato Unix
+RUN dos2unix /usr/local/bin/delete_old_files.sh
 
 # Copiar o arquivo de senha
 COPY .htpasswd /etc/nginx/.htpasswd
