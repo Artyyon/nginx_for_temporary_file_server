@@ -153,9 +153,18 @@ http {
 ```sh
 #!/bin/sh
 
+# Diretório onde os arquivos são armazenados
 UPLOAD_DIR="/usr/share/nginx/html/files"
 
-find "$UPLOAD_DIR" -type f -mmin +10 -exec rm -f {} \;
+# Log de execução
+echo "$(date) - Executando script de exclusão" >> /var/log/nginx/delete_files.log
+
+# Verificar o diretório e os arquivos
+ls -l "$UPLOAD_DIR" >> /var/log/nginx/delete_files.log
+
+# Encontrar e excluir arquivos com mais de 10 minutos
+find "$UPLOAD_DIR" -type f -mmin +10 -exec rm -f {} \; 2>> /var/log/nginx/delete_files.log
+
 ```
 
 
@@ -185,17 +194,36 @@ O arquivo `.htpasswd` contém o usuário e senha hash para autenticação básic
 ```dockerfile
 FROM nginx:latest
 
-RUN apt-get update && apt-get install -y cron apache2-utils
 
+# Instalar cron, apache2-utils e dos2unix
+RUN apt-get update && apt-get install -y cron apache2-utils dos2unix
+
+
+# Copiar arquivos de configuração do Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY conf.d/server.conf /etc/nginx/conf.d/server.conf
+
+
+# Copiar o script de exclusão
 COPY delete_old_files.sh /usr/local/bin/delete_old_files.sh
+
+
+# Converter o script para formato Unix
+RUN dos2unix /usr/local/bin/delete_old_files.sh
+
+# Copiar o arquivo de senha
 COPY .htpasswd /etc/nginx/.htpasswd
 
+
+# Configurar permissões para o script
 RUN chmod +x /usr/local/bin/delete_old_files.sh
 
+
+# Adicionar tarefa cron para excluir arquivos antigos a cada minuto
 RUN (crontab -l ; echo "* * * * * /usr/local/bin/delete_old_files.sh") | crontab -
 
+
+# Iniciar cron e nginx
 CMD service cron start && nginx -g 'daemon off;'
 ```
 
@@ -246,4 +274,4 @@ networks:
 
 
 
-<sub>Ultima atualização 29/07/2024.</sub>
+<sub>Ultima atualização 08/08/2024.</sub>
